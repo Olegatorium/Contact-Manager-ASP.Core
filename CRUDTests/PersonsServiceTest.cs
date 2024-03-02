@@ -18,8 +18,8 @@ namespace CRUDTests
 
 		public PersonsServiceTest(ITestOutputHelper testOutputHelper)
 		{
-			_personService = new PersonsService();
-			_countriesService = new CountriesService();
+			_personService = new PersonsService(false);
+			_countriesService = new CountriesService(false);
 			_testOutputHelper = testOutputHelper;
 		}
 
@@ -350,7 +350,7 @@ namespace CRUDTests
 
 			List<PersonResponse> allPersons = _personService.GetAllPersons();
 
-			List<PersonResponse> persons_list_from_sort = _personService.GetSortedPersons(allPersons, nameof(Person.PersonName), SortOrderOptions.DESK);
+			List<PersonResponse> persons_list_from_sort = _personService.GetSortedPersons(allPersons, nameof(Person.PersonName), SortOrderOptions.DESC);
 
 
 			//print persons_list_from_sort
