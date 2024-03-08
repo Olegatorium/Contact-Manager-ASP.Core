@@ -265,7 +265,7 @@ namespace Services
 			ValidationHelper.ModelValidation(personUpdateRequest);
 
 			// get matching person object to update
-			Person? personToUpdate = _persons.FirstOrDefault(x => x.PersonID == personUpdateRequest.PersonId);
+			Person? personToUpdate = _persons.FirstOrDefault(x => x.PersonID == personUpdateRequest.PersonID);
  
 
 			if (personToUpdate == null)

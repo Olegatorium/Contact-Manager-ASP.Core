@@ -13,7 +13,7 @@ namespace ServiceContracts.DTO
 	public class PersonUpdateRequest
 	{
 		[Required(ErrorMessage = "Person ID can't be blank")]
-		public Guid PersonId { get; set; }
+		public Guid PersonID { get; set; }
 		public string? PersonName { get; set; }
 
 		[Required(ErrorMessage = "Email can't be blank")]
@@ -32,7 +32,7 @@ namespace ServiceContracts.DTO
 		/// <returns></returns>
 		public Person ToPerson()
 		{
-			return new Person() {PersonID = PersonId, PersonName = PersonName, Email = Email, DateOfBirth = DateOfBirth, Gender = Gender.ToString(), Address = Address, CountryID = CountryID, ReceiveNewsLetters = ReceiveNewsLetters };
+			return new Person() {PersonID = PersonID, PersonName = PersonName, Email = Email, DateOfBirth = DateOfBirth, Gender = Gender.ToString(), Address = Address, CountryID = CountryID, ReceiveNewsLetters = ReceiveNewsLetters };
 		}
 	}
 }

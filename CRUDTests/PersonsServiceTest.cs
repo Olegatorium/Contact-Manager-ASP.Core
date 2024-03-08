@@ -397,7 +397,7 @@ namespace CRUDTests
 		{
 			//Arrange
 
-			PersonUpdateRequest? personUpdateRequest = new PersonUpdateRequest() { PersonId = Guid.NewGuid(),
+			PersonUpdateRequest? personUpdateRequest = new PersonUpdateRequest() { PersonID = Guid.NewGuid(),
 				Email = "mark@gmail.com"};
 
 			//Assert

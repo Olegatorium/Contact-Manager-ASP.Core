@@ -52,7 +52,7 @@ namespace ServiceContracts.DTO
 		{
 			return new PersonUpdateRequest()
 			{
-				PersonId = PersonID,
+				PersonID = PersonID,
 				PersonName = PersonName,
 				Address = Address,
 				CountryID = CountryID,
