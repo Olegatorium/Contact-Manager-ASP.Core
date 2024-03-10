@@ -22,8 +22,6 @@ namespace Services
             _countriesService = countriesService;
         }
 
-
-
         private PersonResponse ConvertPersonToPersonResponse(Person person)
 		{
 			PersonResponse personResponse = person.ToPersonResponse();

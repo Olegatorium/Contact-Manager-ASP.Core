@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,5 +34,6 @@ namespace Entities
         public string? Address { get; set; }
 		public bool ReceiveNewsLetters { get; set; }
 		public string? TIN { get; set; }
+
 	}
 }

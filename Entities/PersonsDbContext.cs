@@ -56,7 +56,7 @@ namespace Entities
             //modelBuilder.Entity<Person>().HasIndex(temp => temp.TIN).IsUnique();
 
             modelBuilder.Entity<Person>().HasCheckConstraint("CHK_TIN", "len([TaxIdNumber]) = 11");
-
+            
         }
 
         public List<Person> sp_GetAllPersons()
