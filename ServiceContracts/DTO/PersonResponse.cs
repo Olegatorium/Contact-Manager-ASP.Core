@@ -19,13 +19,14 @@ namespace ServiceContracts.DTO
 		public string? Address { get; set; }
 		public bool ReceiveNewsLetters { get; set; }
 		public double? Age { get; set; }
+        public string? TIN { get; set; }
 
-		/// <summary>
-		/// Compares the current object data with the parameter object
-		/// </summary>
-		/// <param name="obj">The PersonResponse Object to compare</param>
-		/// <returns>True or false, indicating whether all person details are matched with the specified parameter object</returns>
-		public override bool Equals(object? obj)
+        /// <summary>
+        /// Compares the current object data with the parameter object
+        /// </summary>
+        /// <param name="obj">The PersonResponse Object to compare</param>
+        /// <returns>True or false, indicating whether all person details are matched with the specified parameter object</returns>
+        public override bool Equals(object? obj)
 		{
 			if (obj == null) return false;
 
@@ -85,7 +86,8 @@ namespace ServiceContracts.DTO
 				Address = person.Address,
 				CountryID = person.CountryID,
 				Gender = person.Gender,
-				Age = (person.DateOfBirth != null) ? Math.Round((DateTime.Now - person.DateOfBirth.Value).TotalDays / 365.25) : null
+				Age = (person.DateOfBirth != null) ? Math.Round((DateTime.Now - person.DateOfBirth.Value).TotalDays / 365.25) : null,
+				TIN = person.TIN
 			};
 		}
 	}

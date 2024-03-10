@@ -47,6 +47,16 @@ namespace Entities
             {
                 modelBuilder.Entity<Person>().HasData(item);
             }
+
+            // Fluent API
+
+            modelBuilder.Entity<Person>().Property(temp => temp.TIN).HasColumnName("TaxIdNumber")
+                .HasColumnType("varchar(11)").HasDefaultValue("ABC12345");
+
+            //modelBuilder.Entity<Person>().HasIndex(temp => temp.TIN).IsUnique();
+
+            modelBuilder.Entity<Person>().HasCheckConstraint("CHK_TIN", "len([TaxIdNumber]) = 11");
+
         }
 
         public List<Person> sp_GetAllPersons()
@@ -64,10 +74,12 @@ namespace Entities
         new SqlParameter("@Gender", person.Gender),
         new SqlParameter("@CountryID", person.CountryID),
         new SqlParameter("@Address", person.Address),
-        new SqlParameter("@ReceiveNewsLetters", person.ReceiveNewsLetters)
+        new SqlParameter("@ReceiveNewsLetters", person.ReceiveNewsLetters),
+        new SqlParameter("@TaxIdNumber", person.TIN)
       };
 
-            int efectedRows = Database.ExecuteSqlRaw("EXECUTE [dbo].[InsertPerson] @PersonID, @PersonName, @Email, @DateOfBirth, @Gender, @CountryID, @Address, @ReceiveNewsLetters", parameters);
+            int efectedRows = Database.ExecuteSqlRaw("EXECUTE [dbo].[InsertPerson] @PersonID, @PersonName, " +
+                "@Email, @DateOfBirth, @Gender, @CountryID, @Address, @ReceiveNewsLetters, @TaxIdNumber", parameters);
 
             return efectedRows;
         }

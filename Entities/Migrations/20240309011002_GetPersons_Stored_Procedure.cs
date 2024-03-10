@@ -11,7 +11,7 @@ namespace Entities.Migrations
             string sp_GetAllPersons = @"
         CREATE PROCEDURE [dbo].[GetAllPersons]
         AS BEGIN
-          SELECT PersonID, PersonName, Email, DateOfBirth, Gender, CountryID, Address, ReceiveNewsLetters FROM [dbo].[Persons]
+          SELECT PersonID, PersonName, Email, DateOfBirth, Gender, CountryID, Address, ReceiveNewsLetters, TaxIdNumber FROM [dbo].[Persons]
         END
       ";
             migrationBuilder.Sql(sp_GetAllPersons);
