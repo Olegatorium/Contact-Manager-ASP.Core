@@ -6,7 +6,11 @@
 <form asp-controller="Persons" asp-action="Index" method="get">
  <h1>Persons</h1>
 
- <a href="~/persons/create">Create Person</a>
+ <a href="~/persons/create" class="ml">Create Person</a>
+
+ <a asp-controller="Persons" asp-action="PersonsPDF" class="ml">Download as PDF</a>
+
+  <a asp-controller="Persons" asp-action="PersonsCSV" class="ml">Download as CSV</a>
 
  <div class="box flex">
   <div class="flex-1">
