@@ -15,27 +15,27 @@ namespace ServiceContracts
 		/// </summary>
 		/// <param name="personAddRequest"></param>
 		/// <returns></returns>
-		PersonResponse AddPerson(PersonAddRequest? personAddRequest);
+		Task<PersonResponse> AddPerson(PersonAddRequest? personAddRequest);
 
-		/// <summary>
-		/// return list of all persons
-		/// </summary>
-		/// <returns></returns>
-		List<PersonResponse> GetAllPersons();
+        /// <summary>
+        /// return list of all persons
+        /// </summary>
+        /// <returns></returns>
+        Task<List<PersonResponse>> GetAllPersons();
 
-		/// <summary>
-		/// Get Person By Person ID
-		/// </summary>
-		/// <param name="personID"></param>
-		/// <returns></returns>
-		PersonResponse? GetPersonByPersonID(Guid? personID);
+        /// <summary>
+        /// Get Person By Person ID
+        /// </summary>
+        /// <param name="personID"></param>
+        /// <returns></returns>
+        Task<PersonResponse?> GetPersonByPersonID(Guid? personID);
 
-		List<PersonResponse> GetFilteredPersons(string searchBy, string? searchString);
+        Task<List<PersonResponse>> GetFilteredPersons(string searchBy, string? searchString);
 
-		List<PersonResponse> GetSortedPersons(List<PersonResponse> allPersons, string sortBy, SortOrderOptions sortOrder);
+		Task<List<PersonResponse>> GetSortedPersons(List<PersonResponse> allPersons, string sortBy, SortOrderOptions sortOrder);
 
-		PersonResponse UpdatePerson(PersonUpdateRequest? personUpdateRequest);
+        Task<PersonResponse> UpdatePerson(PersonUpdateRequest? personUpdateRequest);
 
-		bool DeletePerson(Guid? PersonId);
+        Task<bool> DeletePerson(Guid? PersonId);
 	}
 }

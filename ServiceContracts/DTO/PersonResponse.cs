@@ -87,8 +87,9 @@ namespace ServiceContracts.DTO
 				CountryID = person.CountryID,
 				Gender = person.Gender,
 				Age = (person.DateOfBirth != null) ? Math.Round((DateTime.Now - person.DateOfBirth.Value).TotalDays / 365.25) : null,
-				TIN = person.TIN
-			};
+				TIN = person.TIN,
+                Country = person.Country?.CountryName
+            };
 		}
 	}
 }
