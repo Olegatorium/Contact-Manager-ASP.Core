@@ -299,7 +299,7 @@ namespace Services
         {
             MemoryStream memoryStream = new MemoryStream();
 
-			using (ExcelPackage excelPackage = new ExcelPackage())
+			using (ExcelPackage excelPackage = new ExcelPackage(memoryStream))
 			{
 				ExcelWorksheet workSheet = excelPackage.Workbook.Worksheets.Add("PersonsSheet");
 
@@ -312,10 +312,17 @@ namespace Services
                 workSheet.Cells["G1"].Value = "Address";
                 workSheet.Cells["H1"].Value = "Receive News Letters";
 
-				int row = 2;
+				using (ExcelRange headerCells = workSheet.Cells["A1:H1"]) 
+				{
+				   headerCells.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+					headerCells.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.ForestGreen);
+					headerCells.Style.Font.Bold = true;
+				}
+
+					int row = 2;
 				List<PersonResponse> persons = _db.Persons.Include("Country").Select(temp => temp.ToPersonResponse()).ToList();
 
-				foreach (var item in persons)
+				foreach (var person in persons)
 				{
                     workSheet.Cells[row, 1].Value = person.PersonName;
                     workSheet.Cells[row, 2].Value = person.Email;
@@ -329,7 +336,14 @@ namespace Services
 
                     row++;
                 }
+
+                workSheet.Cells[$"A1:H{row}"].AutoFitColumns();
+
+                await excelPackage.SaveAsync();
             }
+
+            memoryStream.Position = 0;
+            return memoryStream;
         }
     }
 }
