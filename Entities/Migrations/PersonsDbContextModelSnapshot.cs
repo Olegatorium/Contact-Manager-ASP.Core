@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Entities.Migrations
 {
-    [DbContext(typeof(PersonsDbContext))]
+    [DbContext(typeof(ApplicationDbContext))]
     partial class PersonsDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
@@ -101,6 +101,8 @@ namespace Entities.Migrations
                         .HasColumnName("TaxIdNumber");
 
                     b.HasKey("PersonID");
+
+                    b.HasIndex("CountryID");
 
                     b.ToTable("Persons", (string)null);
 
@@ -251,6 +253,20 @@ namespace Entities.Migrations
                             ReceiveNewsLetters = true,
                             TIN = "999-00-1111"
                         });
+                });
+
+            modelBuilder.Entity("Entities.Person", b =>
+                {
+                    b.HasOne("Entities.Country", "Country")
+                        .WithMany("Persons")
+                        .HasForeignKey("CountryID");
+
+                    b.Navigation("Country");
+                });
+
+            modelBuilder.Entity("Entities.Country", b =>
+                {
+                    b.Navigation("Persons");
                 });
 #pragma warning restore 612, 618
         }

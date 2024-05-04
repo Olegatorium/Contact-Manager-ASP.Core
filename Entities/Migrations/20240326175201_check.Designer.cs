@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Entities.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240309235832_TIN_Column")]
-    partial class TIN_Column
+    [Migration("20240326175201_check")]
+    partial class check
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -97,11 +97,18 @@ namespace Entities.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("TIN")
-                        .HasColumnType("nvarchar(max)");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varchar(11)")
+                        .HasDefaultValue("ABC12345")
+                        .HasColumnName("TaxIdNumber");
 
                     b.HasKey("PersonID");
 
+                    b.HasIndex("CountryID");
+
                     b.ToTable("Persons", (string)null);
+
+                    b.HasCheckConstraint("CHK_TIN", "len([TaxIdNumber]) = 11");
 
                     b.HasData(
                         new
@@ -113,7 +120,8 @@ namespace Entities.Migrations
                             Email = "mwebsdale0@people.com.cn",
                             Gender = "Female",
                             PersonName = "Marguerite",
-                            ReceiveNewsLetters = false
+                            ReceiveNewsLetters = false,
+                            TIN = "123-45-6789"
                         },
                         new
                         {
@@ -124,7 +132,8 @@ namespace Entities.Migrations
                             Email = "ushears1@globo.com",
                             Gender = "Female",
                             PersonName = "Ursa",
-                            ReceiveNewsLetters = false
+                            ReceiveNewsLetters = false,
+                            TIN = "987-65-4321"
                         },
                         new
                         {
@@ -135,7 +144,8 @@ namespace Entities.Migrations
                             Email = "fbowsher2@howstuffworks.com",
                             Gender = "Male",
                             PersonName = "Franchot",
-                            ReceiveNewsLetters = true
+                            ReceiveNewsLetters = true,
+                            TIN = "555-11-2233"
                         },
                         new
                         {
@@ -146,7 +156,8 @@ namespace Entities.Migrations
                             Email = "asarvar3@dropbox.com",
                             Gender = "Male",
                             PersonName = "Angie",
-                            ReceiveNewsLetters = true
+                            ReceiveNewsLetters = true,
+                            TIN = "111-22-3333"
                         },
                         new
                         {
@@ -157,7 +168,8 @@ namespace Entities.Migrations
                             Email = "ttregona4@stumbleupon.com",
                             Gender = "Gender",
                             PersonName = "Tani",
-                            ReceiveNewsLetters = false
+                            ReceiveNewsLetters = false,
+                            TIN = "444-55-6666"
                         },
                         new
                         {
@@ -168,7 +180,8 @@ namespace Entities.Migrations
                             Email = "mlingfoot5@netvibes.com",
                             Gender = "Male",
                             PersonName = "Mitchael",
-                            ReceiveNewsLetters = false
+                            ReceiveNewsLetters = false,
+                            TIN = "777-88-9999"
                         },
                         new
                         {
@@ -179,7 +192,8 @@ namespace Entities.Migrations
                             Email = "mjarrell6@wisc.edu",
                             Gender = "Male",
                             PersonName = "Maddy",
-                            ReceiveNewsLetters = true
+                            ReceiveNewsLetters = true,
+                            TIN = "000-11-2222"
                         },
                         new
                         {
@@ -190,7 +204,8 @@ namespace Entities.Migrations
                             Email = "pretchford7@virginia.edu",
                             Gender = "Female",
                             PersonName = "Pegeen",
-                            ReceiveNewsLetters = true
+                            ReceiveNewsLetters = true,
+                            TIN = "888-99-0000"
                         },
                         new
                         {
@@ -201,7 +216,8 @@ namespace Entities.Migrations
                             Email = "hmosco8@tripod.com",
                             Gender = "Male",
                             PersonName = "Hansiain",
-                            ReceiveNewsLetters = true
+                            ReceiveNewsLetters = true,
+                            TIN = "123-12-1234"
                         },
                         new
                         {
@@ -212,7 +228,8 @@ namespace Entities.Migrations
                             Email = "lwoodwing9@wix.com",
                             Gender = "Male",
                             PersonName = "Lombard",
-                            ReceiveNewsLetters = false
+                            ReceiveNewsLetters = false,
+                            TIN = "555-44-3333"
                         },
                         new
                         {
@@ -223,7 +240,8 @@ namespace Entities.Migrations
                             Email = "mconachya@va.gov",
                             Gender = "Female",
                             PersonName = "Minta",
-                            ReceiveNewsLetters = true
+                            ReceiveNewsLetters = true,
+                            TIN = "666-55-4444"
                         },
                         new
                         {
@@ -234,8 +252,23 @@ namespace Entities.Migrations
                             Email = "vklussb@nationalgeographic.com",
                             Gender = "Female",
                             PersonName = "Verene",
-                            ReceiveNewsLetters = true
+                            ReceiveNewsLetters = true,
+                            TIN = "999-00-1111"
                         });
+                });
+
+            modelBuilder.Entity("Entities.Person", b =>
+                {
+                    b.HasOne("Entities.Country", "Country")
+                        .WithMany("Persons")
+                        .HasForeignKey("CountryID");
+
+                    b.Navigation("Country");
+                });
+
+            modelBuilder.Entity("Entities.Country", b =>
+                {
+                    b.Navigation("Persons");
                 });
 #pragma warning restore 612, 618
         }
