@@ -10,6 +10,7 @@ using Xunit.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using EntityFrameworkCoreMock;
 using AutoFixture;
+using FluentAssertions;
 
 namespace CRUDTests
 {
@@ -112,11 +113,19 @@ namespace CRUDTests
              .Create();
 
             //Assert
-            await Assert.ThrowsAsync<ArgumentException>(async () =>
+            Func<Task> action = async () =>
             {
                 //Act
                 await _personService.AddPerson(personAddRequest);
-            });
+            };
+
+            await action.Should().ThrowAsync<ArgumentException>();
+
+            //// Second variant:
+            //await Assert.ThrowsAsync<ArgumentException>(async () =>
+            //{
+            //    await _personService.AddPerson(personAddRequest);
+            //});
         }
 
         //When we supply proper person details, it should insert the person into the persons list; and it should return an object of PersonResponse, which includes with the newly generated person id
@@ -133,9 +142,16 @@ namespace CRUDTests
             List<PersonResponse> persons_list = await _personService.GetAllPersons();
 
             //Assert
-            Assert.True(person_response_from_add.PersonID != Guid.Empty);
 
-            Assert.Contains(person_response_from_add, persons_list);
+            person_response_from_add.PersonID.Should().NotBe(Guid.Empty);
+
+            persons_list.Should().Contain(person_response_from_add);
+
+
+            //// Second variant:
+            //Assert.True(person_response_from_add.PersonID != Guid.Empty);
+
+            //Assert.Contains(person_response_from_add, persons_list);
         }
 
         #endregion
@@ -153,7 +169,12 @@ namespace CRUDTests
             PersonResponse? person_response_from_get = await _personService.GetPersonByPersonID(personID);
 
             //Assert
-            Assert.Null(person_response_from_get);
+
+            person_response_from_get.Should().BeNull();
+
+            //Second variant:
+
+            //Assert.Null(person_response_from_get);
         }
 
 
@@ -174,7 +195,12 @@ namespace CRUDTests
             PersonResponse? person_response_from_get = await _personService.GetPersonByPersonID(person_response_from_add.PersonID);
 
             //Assert
-            Assert.Equal(person_response_from_add, person_response_from_get);
+
+            person_response_from_get.Should().Be(person_response_from_get);
+
+            //Second variant:
+
+            //Assert.Equal(person_response_from_add, person_response_from_get);
         }
 
         #endregion
@@ -189,7 +215,11 @@ namespace CRUDTests
             List<PersonResponse> persons_from_get = await _personService.GetAllPersons();
 
             //Assert
-            Assert.Empty(persons_from_get);
+
+            persons_from_get.Should().BeEmpty();
+
+            //second variant:
+            //Assert.Empty(persons_from_get);
         }
 
         // it should return all persons
@@ -224,11 +254,15 @@ namespace CRUDTests
 				_testOutputHelper.WriteLine(item.ToString());
 			}
 
-			//Assert
-			foreach (PersonResponse person_response_from_add in person_response_list_from_add)
-			{
-				Assert.Contains(person_response_from_add, persons_list_from_get);
-			}
+            //Assert
+
+            persons_list_from_get.Should().BeEquivalentTo(person_response_list_from_add);
+
+            //second variant:
+			//foreach (PersonResponse person_response_from_add in person_response_list_from_add)
+			//{
+			//	Assert.Contains(person_response_from_add, persons_list_from_get);
+			//}
 		}
 		#endregion
 
@@ -264,13 +298,16 @@ namespace CRUDTests
 				_testOutputHelper.WriteLine(item.ToString());
 			}
 
-			//Assert
-			foreach (PersonResponse person_response_from_add in person_response_list_from_add)
-			{
-				Assert.Contains(person_response_from_add, filtered_persons);
-			}
+            //Assert
 
-		}
+            person_response_list_from_add.Should().BeEquivalentTo(filtered_persons);
+
+            //foreach (PersonResponse person_response_from_add in person_response_list_from_add)
+            //{
+            //	Assert.Contains(person_response_from_add, filtered_persons);
+            //}
+
+        }
 
 		//First we will add few persons; and then we will search based on person name with some search string. It should return the matching persons
 		[Fact]
@@ -317,18 +354,21 @@ namespace CRUDTests
 				_testOutputHelper.WriteLine(item.ToString());
 			}
 
-			//Assert
-			foreach (PersonResponse item in person_expected_response_list)
-			{
-				if (item.PersonName != null)
-				{
-					if (item.PersonName.Contains("ma", StringComparison.OrdinalIgnoreCase))
-					{
-						Assert.Contains(item, persons_list_from_search);
-					}
-				}
-			}
-		}
+            //Assert
+
+            persons_list_from_search.Should().OnlyContain(t => t.PersonName.Contains("ma", StringComparison.OrdinalIgnoreCase));
+
+            //foreach (PersonResponse item in person_expected_response_list)
+            //{
+            //	if (item.PersonName != null)
+            //	{
+            //		if (item.PersonName.Contains("ma", StringComparison.OrdinalIgnoreCase))
+            //		{
+            //			Assert.Contains(item, persons_list_from_search);
+            //		}
+            //	}
+            //}
+        }
 
         #endregion
 
@@ -372,15 +412,17 @@ namespace CRUDTests
 				_testOutputHelper.WriteLine(item.ToString());
 			}
 
-			//Assert
+            //Assert
 
-			for (int i = 0; i < person_response_list_from_add.Count; i++)
-			{
+            person_response_list_from_add.Should().BeEquivalentTo(persons_list_from_sort);
 
-				Assert.Equal(person_response_list_from_add[i], persons_list_from_sort[i]);
+            //for (int i = 0; i < person_response_list_from_add.Count; i++)
+            //{
 
-			}
-		}
+            //	Assert.Equal(person_response_list_from_add[i], persons_list_from_sort[i]);
+
+            //}
+        }
 
         #endregion
 
@@ -462,8 +504,9 @@ namespace CRUDTests
             PersonResponse? person_response_from_get = await _personService.GetPersonByPersonID(person_response_from_update.PersonID);
 
             //Assert
-            Assert.Equal(person_response_from_get, person_response_from_update);
+            person_response_from_get.Should().Be(person_response_from_update);
 
+            //Assert.Equal(person_response_from_get, person_response_from_update);
 
         }
 
@@ -489,7 +532,10 @@ namespace CRUDTests
             bool isDeleted = await _personService.DeletePerson(person_response_from_add.PersonID);
 
             //Assert
-            Assert.True(isDeleted);
+
+            isDeleted.Should().BeTrue();
+
+            //Assert.True(isDeleted);
         }
 
 
@@ -501,7 +547,10 @@ namespace CRUDTests
             bool isDeleted = await _personService.DeletePerson(Guid.NewGuid());
 
             //Assert
-            Assert.False(isDeleted);
+
+            isDeleted.Should().BeFalse();
+
+            //Assert.False(isDeleted);
         }
 
         #endregion
