@@ -11,6 +11,8 @@ using Microsoft.EntityFrameworkCore;
 using EntityFrameworkCoreMock;
 using AutoFixture;
 using FluentAssertions;
+using RepositoryContracts;
+using Moq;
 
 namespace CRUDTests
 {
@@ -21,9 +23,15 @@ namespace CRUDTests
 		private readonly ITestOutputHelper _testOutputHelper;
 		private readonly IFixture _fixture;
 
+        private readonly Mock<IPersonsRepository> _personsRepositoryMock;
+        private readonly IPersonsRepository _personsRepository;
+
 		public PersonsServiceTest(ITestOutputHelper testOutputHelper)
 		{
 			_fixture = new Fixture();
+
+            _personsRepositoryMock = new Mock<IPersonsRepository>();
+            _personsRepository = _personsRepositoryMock.Object;
 
             ///
 
@@ -42,7 +50,7 @@ namespace CRUDTests
 
 			dbContextMock.CreateDbSetMock(temp => temp.Countries, countriesInitialData);
 
-			_countriesService = new CountriesService(dbContext);
+			_countriesService = new CountriesService(null);
 
 			///
 
@@ -50,9 +58,9 @@ namespace CRUDTests
 
             dbContextMock.CreateDbSetMock(temp => temp.Persons, personsInitialData);
 
-            _personService = new PersonsService(dbContext, _countriesService);
+            _personService = new PersonsService(_personsRepository);
         }
-
+         
         #region HelperMethods
         public async Task<List<PersonAddRequest>> GetListOfPersonRequests()
         {
@@ -130,28 +138,33 @@ namespace CRUDTests
 
         //When we supply proper person details, it should insert the person into the persons list; and it should return an object of PersonResponse, which includes with the newly generated person id
         [Fact]
-        public async Task AddPerson_ProperPersonDetails()
+        public async Task AddPerson_FullPersonDetails_ToBeSuccessful()
         {
 			//Arrange
 			PersonAddRequest? personAddRequest = _fixture.Build<PersonAddRequest>()
 				.With(t => t.Email, "someone@example.com")
 				.Create();
+
+            Person person = personAddRequest.ToPerson();
+
+            PersonResponse person_response_expected = person.ToPersonResponse();
+
+            // if we supply any argument value to the AddPerson it should return the same return value
+            _personsRepositoryMock.Setup(t => t.AddPerson(It.IsAny<Person>()))
+                .ReturnsAsync(person);
+            
             //Act
             PersonResponse person_response_from_add = await _personService.AddPerson(personAddRequest);
-
-            List<PersonResponse> persons_list = await _personService.GetAllPersons();
+            person_response_expected.PersonID = person_response_from_add.PersonID;
 
             //Assert
 
             person_response_from_add.PersonID.Should().NotBe(Guid.Empty);
 
-            persons_list.Should().Contain(person_response_from_add);
-
+            person_response_from_add.Should().Be(person_response_expected);
 
             //// Second variant:
             //Assert.True(person_response_from_add.PersonID != Guid.Empty);
-
-            //Assert.Contains(person_response_from_add, persons_list);
         }
 
         #endregion
