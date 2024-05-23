@@ -141,13 +141,13 @@ namespace CRUDExample.Controllers
 
         [HttpPost]
         [Route("[action]/{personID}")]
-        public async Task<IActionResult> Delete(PersonUpdateRequest personUpdateResult)
+        public async Task<IActionResult> Delete(PersonUpdateRequest personUpdateRequest)
         {
-            PersonResponse? personResponse = await _personsService.GetPersonByPersonID(personUpdateResult.PersonID);
+            PersonResponse? personResponse = await _personsService.GetPersonByPersonID(personUpdateRequest.PersonID);
             if (personResponse == null)
                 return RedirectToAction("Index");
 
-            await _personsService.DeletePerson(personUpdateResult.PersonID);
+            await _personsService.DeletePerson(personUpdateRequest.PersonID);
             return RedirectToAction("Index");
         }
 

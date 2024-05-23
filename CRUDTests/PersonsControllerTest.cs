@@ -140,7 +140,7 @@ namespace CRUDTests
         #region Edit
 
         [Fact]
-        public async void Edit_IfModelErrors_ToReturnEditView()
+        public async void Edit_POST_IfModelErrors_ToReturnEditView()
         {
             PersonUpdateRequest personUpdateRequest = _fixture.Build<PersonUpdateRequest>()
              .With(temp => temp.PersonName, null as string)
@@ -176,7 +176,7 @@ namespace CRUDTests
         }
 
         [Fact]
-        public async void Edit_IfNoModelErrors_ToReturnRedirectToIndex() 
+        public async void Edit_POST_IfNoModelErrors_ToReturnRedirectToIndex() 
         {
            PersonUpdateRequest personUpdateRequest = _fixture.Create<PersonUpdateRequest>(); 
 
@@ -210,7 +210,7 @@ namespace CRUDTests
         }
 
         [Fact]
-        public async void Edit_GET_PersonExists_ReturnsViewWithPersonUpdateRequest()
+        public async void Edit_GET_PersonExists_ToReturnEditView()
         {
             PersonUpdateRequest personUpdateRequest = _fixture.Create<PersonUpdateRequest>();
 
@@ -263,6 +263,106 @@ namespace CRUDTests
             RedirectToActionResult redirectResult = Assert.IsType<RedirectToActionResult>(result);
 
             redirectResult.ActionName.Should().Be("Index");
+        }
+
+        #endregion
+
+        #region Delete
+
+        [Fact]
+        public async void Delete_POST_PersonDoesNotExist_RedirectsToIndex() 
+        {
+            PersonUpdateRequest personUpdateRequest = _fixture.Create<PersonUpdateRequest>();
+
+            _personsServiceMock
+              .Setup(x => x.GetPersonByPersonID(It.IsAny<Guid>()))
+              .ReturnsAsync(null as PersonResponse);
+
+
+            PersonsController personsController = new PersonsController(_personsService, _countriesService);
+
+            //Act
+
+            IActionResult result = await personsController.Delete(personUpdateRequest);
+
+            RedirectToActionResult redirectResult = Assert.IsType<RedirectToActionResult>(result);
+
+            redirectResult.ActionName.Should().Be("Index");
+
+        }
+
+        [Fact]
+        public async void Delete_POST_PersonExist_RedirectsToIndex()
+        {
+            PersonUpdateRequest personUpdateRequest = _fixture.Create<PersonUpdateRequest>();
+
+            Person person = personUpdateRequest.ToPerson();
+
+            PersonResponse personResponse = person.ToPersonResponse();
+
+            _personsServiceMock
+              .Setup(x => x.GetPersonByPersonID(It.IsAny<Guid>()))
+              .ReturnsAsync(personResponse);
+
+
+            PersonsController personsController = new PersonsController(_personsService, _countriesService);
+
+            //Act
+
+            IActionResult result = await personsController.Delete(personUpdateRequest);
+
+            RedirectToActionResult redirectResult = Assert.IsType<RedirectToActionResult>(result);
+
+            redirectResult.ActionName.Should().Be("Index");
+
+        }
+
+        [Fact]
+        public async void Delete_Get_PersonDoesNotExist_RedirectsToIndex()
+        {
+            PersonUpdateRequest personUpdateRequest = _fixture.Create<PersonUpdateRequest>();
+
+            _personsServiceMock
+              .Setup(x => x.GetPersonByPersonID(It.IsAny<Guid>()))
+              .ReturnsAsync(null as PersonResponse);
+
+
+            PersonsController personsController = new PersonsController(_personsService, _countriesService);
+
+            //Act
+
+            IActionResult result = await personsController.Delete(personUpdateRequest.PersonID);
+
+            RedirectToActionResult redirectResult = Assert.IsType<RedirectToActionResult>(result);
+
+            redirectResult.ActionName.Should().Be("Index");
+        }
+
+        [Fact]
+        public async void Delete_Get_PersonExist_ToReturnDeleteView()
+        {
+            PersonUpdateRequest personUpdateRequest = _fixture.Create<PersonUpdateRequest>();
+
+            Person person = personUpdateRequest.ToPerson();
+
+            PersonResponse personResponse = person.ToPersonResponse();
+
+            _personsServiceMock
+              .Setup(x => x.GetPersonByPersonID(It.IsAny<Guid>()))
+              .ReturnsAsync(personResponse);
+
+
+            PersonsController personsController = new PersonsController(_personsService, _countriesService);
+
+            //Act
+
+            IActionResult result = await personsController.Delete(personUpdateRequest.PersonID);
+
+            ViewResult viewResult = Assert.IsType<ViewResult>(result);
+
+            viewResult.ViewData.Model.Should().BeAssignableTo<PersonResponse>();
+
+            viewResult.ViewData.Model.Should().Be(personResponse);
         }
 
         #endregion
