@@ -27,8 +27,20 @@ namespace CRUDTests
             //Act
             HttpResponseMessage response = await _client.GetAsync("/Persons/Index");
 
-            //Assert
+            ////Assert
             response.Should().BeSuccessful();
+
+        }
+
+        [Fact]
+        public async Task Index_ToContainPersonsTable()
+        {
+            //Arrange
+
+            //Act
+            HttpResponseMessage response = await _client.GetAsync("/Persons/Index");
+
+            ////Assert
 
             string responseBody = await response.Content.ReadAsStringAsync();
 
@@ -38,8 +50,47 @@ namespace CRUDTests
 
             var document = html.DocumentNode;
 
-            document.QuerySelectorAll("table.persons").Should().NotBeNull();
+            document.QuerySelectorAll("table.persons").Should().NotBeEmpty();
         }
         #endregion
+
+        #region Create
+
+        [Fact]
+        public async Task Create_ToReturnView()
+        {
+            //Arrange
+
+            //Act
+            HttpResponseMessage response = await _client.GetAsync("/Persons/Create");
+
+            ////Assert
+            response.Should().BeSuccessful();
+
+        }
+
+        [Fact]
+        public async Task Create_ToContainSubmitButton()
+        {
+            //Arrange
+
+            //Act
+            HttpResponseMessage response = await _client.GetAsync("/Persons/create");
+
+            ////Assert
+
+            string responseBody = await response.Content.ReadAsStringAsync();
+
+            HtmlDocument html = new HtmlDocument();
+
+            html.LoadHtml(responseBody);
+
+            var document = html.DocumentNode;
+
+            document.QuerySelectorAll("button.persons").Should().NotBeEmpty();
+        }
+
+        #endregion
+
     }
 }
