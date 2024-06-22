@@ -123,7 +123,7 @@ namespace Services.PersonsServices
                 }
 
                 int row = 2;
-                List<PersonResponse> persons = (await _personsRepository.GetAllPersons()).Select(temp => temp.ToPersonResponse()).ToList();
+                List<PersonResponse> persons = await GetAllPersons();
 
                 foreach (var person in persons)
                 {
