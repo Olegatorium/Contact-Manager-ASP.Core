@@ -4,13 +4,22 @@ using Repositories;
 using RepositoryContracts;
 using ServiceContracts;
 using Services;
+using Services.PersonsServices;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 // add services into IoC container
 builder.Services.AddScoped<ICountriesService, CountriesService>();
-builder.Services.AddScoped<IPersonsService, PersonsService>();
+
+//PersonsServices:
+builder.Services.AddScoped<IPersonsGetterService, PersonsGetterService>();
+builder.Services.AddScoped<IPersonsAdderService, PersonsAdderService>();
+builder.Services.AddScoped<IPersonsUpdaterService, PersonsUpdaterService>();
+builder.Services.AddScoped<IPersonsDeleterService, PersonsDeleterService>();
+builder.Services.AddScoped<IPersonsSorterService, PersonsSorterService>();
+//
+
 builder.Services.AddScoped<IPersonsRepository, PersonsRepository>();
 builder.Services.AddScoped<ICountriesRepository, CountriesRepository>();
 
