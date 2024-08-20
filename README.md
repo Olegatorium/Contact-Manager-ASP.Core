@@ -1,3 +1,2 @@
 # Contact Manager
-In development, a Contact Manager application is being created. 
-It is planned to make it scalable and include all possible features that can be found in Contact Managers.
+A Contact Manager application has been developed, which is scalable and includes all possible features found in modern contact managers.
