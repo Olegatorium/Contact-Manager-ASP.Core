@@ -13,7 +13,11 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<ICountriesService, CountriesService>();
 
 //PersonsServices:
-builder.Services.AddScoped<IPersonsGetterService, PersonsGetterService>();
+builder.Services.AddScoped<IPersonsGetterService, PersonsGetterServiceWithFewExcelFields>();
+
+builder.Services.AddScoped<PersonsGetterService, PersonsGetterService>();
+
+
 builder.Services.AddScoped<IPersonsAdderService, PersonsAdderService>();
 builder.Services.AddScoped<IPersonsUpdaterService, PersonsUpdaterService>();
 builder.Services.AddScoped<IPersonsDeleterService, PersonsDeleterService>();

@@ -37,6 +37,11 @@ namespace Entities.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Persons", x => x.PersonID);
+                    table.ForeignKey(
+                        name: "FK_Persons_Countries_CountryID",
+                        column: x => x.CountryID,
+                        principalTable: "Countries",
+                        principalColumn: "CountryID");
                 });
 
             migrationBuilder.InsertData(
@@ -69,15 +74,20 @@ namespace Entities.Migrations
                     { new Guid("cb035f22-e7cf-4907-bd07-91cfee5240f3"), "484 Clarendon Court", new Guid("8f30bedc-47dd-4286-8950-73d8a68e5d41"), new DateTime(1997, 9, 25, 0, 0, 0, 0, DateTimeKind.Unspecified), "lwoodwing9@wix.com", "Male", "Lombard", false },
                     { new Guid("d15c6d9f-70b4-48c5-afd3-e71261f1a9be"), "83187 Merry Drive", new Guid("12e15727-d369-49a9-8b13-bc22e9362179"), new DateTime(1987, 1, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), "asarvar3@dropbox.com", "Male", "Angie", true }
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Persons_CountryID",
+                table: "Persons",
+                column: "CountryID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Countries");
+                name: "Persons");
 
             migrationBuilder.DropTable(
-                name: "Persons");
+                name: "Countries");
         }
     }
 }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Entities.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240309235832_TIN_Column")]
-    partial class TIN_Column
+    [Migration("20241016204021_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -96,10 +96,9 @@ namespace Entities.Migrations
                     b.Property<bool>("ReceiveNewsLetters")
                         .HasColumnType("bit");
 
-                    b.Property<string>("TIN")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("PersonID");
+
+                    b.HasIndex("CountryID");
 
                     b.ToTable("Persons", (string)null);
 
@@ -236,6 +235,20 @@ namespace Entities.Migrations
                             PersonName = "Verene",
                             ReceiveNewsLetters = true
                         });
+                });
+
+            modelBuilder.Entity("Entities.Person", b =>
+                {
+                    b.HasOne("Entities.Country", "Country")
+                        .WithMany("Persons")
+                        .HasForeignKey("CountryID");
+
+                    b.Navigation("Country");
+                });
+
+            modelBuilder.Entity("Entities.Country", b =>
+                {
+                    b.Navigation("Persons");
                 });
 #pragma warning restore 612, 618
         }

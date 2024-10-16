@@ -71,7 +71,6 @@ namespace Repositories
             foundPersons.CountryID = person.CountryID;
             foundPersons.Address = person.Address;
             foundPersons.ReceiveNewsLetters = person.ReceiveNewsLetters;
-            foundPersons.TIN = person.TIN;
 
             await _db.SaveChangesAsync();
 
