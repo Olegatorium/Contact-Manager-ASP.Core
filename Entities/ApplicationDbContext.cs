@@ -48,40 +48,37 @@ namespace Entities
                 modelBuilder.Entity<Person>().HasData(item);
             }
 
-            // Fluent API
+            //// Fluent API
 
-            modelBuilder.Entity<Person>().Property(temp => temp.TIN).HasColumnName("TaxIdNumber")
-                .HasColumnType("varchar(11)").HasDefaultValue("ABC12345");
+            //modelBuilder.Entity<Person>().Property(temp => temp.TIN).HasColumnName("TaxIdNumber")
+            //    .HasColumnType("varchar(11)").HasDefaultValue("ABC12345");
 
-            //modelBuilder.Entity<Person>().HasIndex(temp => temp.TIN).IsUnique();
-
-            modelBuilder.Entity<Person>().HasCheckConstraint("CHK_TIN", "len([TaxIdNumber]) = 11");
-            
+            //modelBuilder.Entity<Person>().HasCheckConstraint("CHK_TIN", "len([TaxIdNumber]) = 11");
         }
 
-        public List<Person> sp_GetAllPersons()
-        {
-            return Persons.FromSqlRaw("EXECUTE [dbo].[GetAllPersons]").ToList();
-        }
+      //  public List<Person> sp_GetAllPersons()
+      //  {
+      //      return Persons.FromSqlRaw("EXECUTE [dbo].[GetAllPersons]").ToList();
+      //  }
 
-        public int sp_InsertPerson(Person person)
-        {
-            SqlParameter[] parameters = new SqlParameter[] {
-        new SqlParameter("@PersonID", person.PersonID),
-        new SqlParameter("@PersonName", person.PersonName),
-        new SqlParameter("@Email", person.Email),
-        new SqlParameter("@DateOfBirth", person.DateOfBirth),
-        new SqlParameter("@Gender", person.Gender),
-        new SqlParameter("@CountryID", person.CountryID),
-        new SqlParameter("@Address", person.Address),
-        new SqlParameter("@ReceiveNewsLetters", person.ReceiveNewsLetters),
-        new SqlParameter("@TaxIdNumber", person.TIN)
-      };
+      //  public int sp_InsertPerson(Person person)
+      //  {
+      //      SqlParameter[] parameters = new SqlParameter[] {
+      //  new SqlParameter("@PersonID", person.PersonID),
+      //  new SqlParameter("@PersonName", person.PersonName),
+      //  new SqlParameter("@Email", person.Email),
+      //  new SqlParameter("@DateOfBirth", person.DateOfBirth),
+      //  new SqlParameter("@Gender", person.Gender),
+      //  new SqlParameter("@CountryID", person.CountryID),
+      //  new SqlParameter("@Address", person.Address),
+      //  new SqlParameter("@ReceiveNewsLetters", person.ReceiveNewsLetters),
+      //  new SqlParameter("@TaxIdNumber", person.TIN)
+      //};
 
-            int efectedRows = Database.ExecuteSqlRaw("EXECUTE [dbo].[InsertPerson] @PersonID, @PersonName, " +
-                "@Email, @DateOfBirth, @Gender, @CountryID, @Address, @ReceiveNewsLetters, @TaxIdNumber", parameters);
+      //      int efectedRows = Database.ExecuteSqlRaw("EXECUTE [dbo].[InsertPerson] @PersonID, @PersonName, " +
+      //          "@Email, @DateOfBirth, @Gender, @CountryID, @Address, @ReceiveNewsLetters, @TaxIdNumber", parameters);
 
-            return efectedRows;
-        }
+      //      return efectedRows;
+      //  }
     }
 }

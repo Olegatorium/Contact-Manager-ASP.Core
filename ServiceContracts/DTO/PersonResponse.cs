@@ -19,7 +19,6 @@ namespace ServiceContracts.DTO
 		public string? Address { get; set; }
 		public bool ReceiveNewsLetters { get; set; }
 		public double? Age { get; set; }
-        public string? TIN { get; set; }
 
         /// <summary>
         /// Compares the current object data with the parameter object
@@ -87,7 +86,6 @@ namespace ServiceContracts.DTO
 				CountryID = person.CountryID,
 				Gender = person.Gender,
 				Age = (person.DateOfBirth != null) ? Math.Round((DateTime.Now - person.DateOfBirth.Value).TotalDays / 365.25) : null,
-				TIN = person.TIN,
                 Country = person.Country?.CountryName
             };
 		}
